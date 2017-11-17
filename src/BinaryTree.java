@@ -88,7 +88,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
                         parent = node;
                         node = node.right;
                     }
-                    parent.right = null;
+                    parent.right = node.left;
                     root = node;
                     root.left = leftNode;
                     root.right = rightNode;
@@ -123,45 +123,20 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
                     }
                 }
                 if (node.left != null && node.right != null) {
-                    if (lastComparison < 0) {
-                        if (node.left.right == null) {
-                            parent.left = node.left;
-                        } else {
-                            Node leftNode = node.left;
-                            Node rightNode = node.right;
-                            Node lastNode = node;
-                            node = node.left;
-                            while (node.right != null) {
-                                lastNode = node;
-                                node = node.right;
-                            }
-                            if (node.left != null) {
-                                lastNode.right = node.left;
-                            } else lastNode.right = null;
-                            parent.left = node;
-                            parent.left.right = rightNode;
-                            parent.left.left = leftNode;
-                        }
-                    } else {
-                        if (node.right.left == null) {
-                            parent.right = node.right;
-                        } else {
-                            Node leftNode = node.left;
-                            Node rightNode = node.right;
-                            Node lastNode = node;
-                            node = node.right;
-                            while (node.left != null) {
-                                lastNode = node;
-                                node = node.left;
-                            }
-                            if (node.right != null) {
-                                lastNode.left = node.right;
-                            } else lastNode.left = null;
-                            parent.right = node;
-                            parent.right.right = rightNode;
-                            parent.right.left = leftNode;
-                        }
+                    Node leftNode = node.left;
+                    Node rightNode = node.right;
+                    Node lastNode = node;
+                    node = node.left;
+                    while (node.right != null) {
+                        lastNode = node;
+                        node = node.right;
                     }
+                    if (node.left != null) {
+                        lastNode.right = node.left;
+                    } else lastNode.right = null;
+                    parent.left = node;
+                    parent.left.right = rightNode;
+                    parent.left.left = leftNode.left;
                 }
 
             } else {
@@ -169,6 +144,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
                 else parent.right = null;
             }
         }
+        size--;
         return true;
     }
 
@@ -199,7 +175,7 @@ public class BinaryTree<T extends Comparable<T>> extends AbstractSet<T> implemen
 
 
     }
-    
+
 
     public class BinaryTreeIterator implements Iterator<T> {
 
